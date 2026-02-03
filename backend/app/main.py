@@ -20,6 +20,30 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], all
 # Serve static files at /static
 app.mount("/static", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "..", "static")), name="static")
 
+# Serve frontend static files (single-page fallback and pages)
+# FRONTEND_DIR is the workspace-level frontend folder created by the UI work
+FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'frontend'))
+if os.path.isdir(FRONTEND_DIR):
+    app.mount('/', StaticFiles(directory=FRONTEND_DIR, html=True), name='frontend')
+
+# Dedicated routes for convenience (dashboard, login) that return the appropriate page files
+from fastapi.responses import FileResponse
+
+@app.get('/dashboard')
+def dashboard_page():
+    p = os.path.join(FRONTEND_DIR, 'pages', 'dashboard.html')
+    if os.path.exists(p):
+        return FileResponse(p, media_type='text/html')
+    # fallback to root index
+    return FileResponse(os.path.join(FRONTEND_DIR, 'index.html'), media_type='text/html')
+
+@app.get('/login')
+def login_page():
+    p = os.path.join(FRONTEND_DIR, 'pages', 'login.html')
+    if os.path.exists(p):
+        return FileResponse(p, media_type='text/html')
+    return FileResponse(os.path.join(FRONTEND_DIR, 'index.html'), media_type='text/html')
+
 # Initialize MiDaS runner (MiDaS_small for speed)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 midas = MidasRunner(device=device)

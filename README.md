@@ -28,6 +28,16 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 > Notes: MiDaS may download weights at first run. Use MiDaS_small for CPU-friendly operation. If you have a GPU, ensure CUDA-enabled PyTorch is installed.
 
+
+Frontend served by backend
+
+- The backend now serves the frontend static files directly. After starting the backend you can open:
+  - http://localhost:8000/            → main landing page (index)
+  - http://localhost:8000/dashboard   → dashboard page
+  - http://localhost:8000/login       → login-only page
+
+If you are developing the frontend separately you can still open `frontend/index.html` directly in your browser or use the static server scripts in `/frontend/test`.
+
 ### Frontend
 
 1. Install deps and run:
