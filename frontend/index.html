@@ -122,54 +122,61 @@
       width: 420px;
       height: 420px;
       margin-left: auto;
+      perspective: 1200px;
+      -webkit-perspective: 1200px;
     }
 
-    .hex {
+    /* Container for the multi-hexagon set */
+    .hexagon-container {
       position: absolute;
       inset: 0;
-      /* JS-driven rotation for smooth speed transitions */
-      will-change: transform;
-      transform-style: preserve-3d;
-      filter: drop-shadow(0 0 30px rgba(255,255,255,0.18));
-    }
-
-    /* Neon glow layer behind the crisp strokes */
-    .hex .glow {
-      fill: none;
-      stroke: white;
-      stroke-width: 4;
-      stroke-linejoin: round;
-      stroke-linecap: round;
-      opacity: 0.9;
-      filter: blur(8px) drop-shadow(0 0 28px rgba(255,255,255,0.45));
-      transition: filter 300ms ease, opacity 300ms ease;
-    }
-
-    /* Crisp main stroke */
-    .hex path {
-      fill: none;
-      stroke: white;
-      stroke-width: 2;
-      opacity: 0.95;
-      mix-blend-mode: screen;
-    }
-
-    /* Hovered state intensifies glow */
-    .hex.hovered .glow {
-      filter: blur(14px) drop-shadow(0 0 48px rgba(255,255,255,0.95));
-      opacity: 1;
-    }
-
-    svg {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       width: 100%;
       height: 100%;
-      display: block;
+      will-change: transform;
+      transform-style: preserve-3d;
     }
 
-    /* Improve responsiveness and smooth transforms */
-    .hex-wrap { perspective: 1200px; -webkit-perspective: 1200px; }
-    .hex { transition: transform 350ms cubic-bezier(.2,.9,.2,1); }
-    .hex .layer { transform-origin: 50% 50%; }
+    .hexagon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+      filter: drop-shadow(0 0 12px rgba(255,255,255,0.8)) drop-shadow(0 0 25px rgba(255,255,255,0.4));
+      transition: transform 350ms cubic-bezier(.2,.9,.2,1), filter 300ms ease;
+      pointer-events: none; /* allow hover on container itself */
+    }
+
+    .hexagon svg { width: 100%; height: 100%; display: block; }
+    .hexagon path { fill: none; stroke: #ffffff; stroke-width: 2; vector-effect: non-scaling-stroke; opacity: 0.95; mix-blend-mode: screen; }
+
+    /* Sizes from your provided code (scaled slightly to fit) */
+    .hex-1 { width: 288px; height: 288px; }
+    .hex-2 { width: 252px; height: 252px; }
+    .hex-3 { width: 216px; height: 216px; }
+    .hex-4 { width: 180px; height: 180px; }
+    .hex-5 { width: 144px; height: 144px; }
+    .hex-6 { width: 108px; height: 108px; }
+    .hex-7 { width: 72px; height: 72px; }
+
+    /* Hover glow intensification */
+    .hexagon-container.hovered .hexagon { filter: drop-shadow(0 0 22px rgba(255,255,255,0.9)) drop-shadow(0 0 48px rgba(255,255,255,0.45)); }
+
+    /* Subtle per-hex scale layering */
+    .hex-1 { z-index: 1 } .hex-2 { z-index: 2 } .hex-3 { z-index: 3 } .hex-4 { z-index: 4 } .hex-5 { z-index: 5 } .hex-6 { z-index: 6 } .hex-7 { z-index: 7 }
+
+    /* Smooth reveal for hero text after 2s delay */
+    .hero-content { opacity: 0; transform: translateY(24px); transition: opacity 640ms ease, transform 640ms cubic-bezier(.2,.9,.2,1); }
+    .hero-content.visible { opacity: 1; transform: translateY(0); }
+
+    /* Stagger child appearance for buttons */
+    .hero-content .hero-buttons { opacity: 0; transform: translateY(10px); transition: opacity 640ms ease 760ms, transform 640ms cubic-bezier(.2,.9,.2,1) 760ms; }
+    .hero-content.visible .hero-buttons { opacity: 1; transform: translateY(0); }
+
+    svg { display: block }
 
 
     /* LOGIN */
@@ -253,7 +260,7 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div>
+    <div class="hero-content">
       <h1>The next generation<br/>of code review.</h1>
       <p>
         Graphite is the AI code review platform where teams ship higher
@@ -266,24 +273,29 @@
     </div>
 
     <div class="hex-wrap">
-      <div class="hex" id="hex">
-        <svg viewBox="0 0 200 200" aria-hidden="true">
-          <!-- Glow layers (behind) -->
-          <g class="layer glow">
-            <path d="M100 10 173 50 173 150 100 190 27 150 27 50 Z"/>
-            <path d="M100 20 160 55 160 145 100 180 40 145 40 55 Z"/>
-            <path d="M100 30 150 60 150 140 100 170 50 140 50 60 Z"/>
-            <path d="M100 40 140 65 140 135 100 160 60 135 60 65 Z"/>
-          </g>
-
-          <!-- Crisp strokes (front) -->
-          <g class="layer front">
-            <path d="M100 10 173 50 173 150 100 190 27 150 27 50 Z"/>
-            <path d="M100 20 160 55 160 145 100 180 40 145 40 55 Z"/>
-            <path d="M100 30 150 60 150 140 100 170 50 140 50 60 Z"/>
-            <path d="M100 40 140 65 140 135 100 160 60 135 60 65 Z"/>
-          </g>
-        </svg>
+      <!-- Multi-hex container using provided shape and sizes -->
+      <div class="hexagon-container" id="hex-container">
+        <div class="hexagon hex-1">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M 50 8 L 86 28 L 86 72 L 50 92 L 14 72 L 14 28 Z"/></svg>
+        </div>
+        <div class="hexagon hex-2">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M 50 8 L 86 28 L 86 72 L 50 92 L 14 72 L 14 28 Z"/></svg>
+        </div>
+        <div class="hexagon hex-3">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M 50 8 L 86 28 L 86 72 L 50 92 L 14 72 L 14 28 Z"/></svg>
+        </div>
+        <div class="hexagon hex-4">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M 50 8 L 86 28 L 86 72 L 50 92 L 14 72 L 14 28 Z"/></svg>
+        </div>
+        <div class="hexagon hex-5">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M 50 8 L 86 28 L 86 72 L 50 92 L 14 72 L 14 28 Z"/></svg>
+        </div>
+        <div class="hexagon hex-6">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M 50 8 L 86 28 L 86 72 L 50 92 L 14 72 L 14 28 Z"/></svg>
+        </div>
+        <div class="hexagon hex-7">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M 50 8 L 86 28 L 86 72 L 50 92 L 14 72 L 14 28 Z"/></svg>
+        </div>
       </div>
     </div>
   </section>
@@ -309,58 +321,65 @@
   </section>
 
   <script>
-    // Smooth JS-driven rotation + hover speed and parallax depth
+    // Multi-hex smooth rotation + hover speed and parallax depth
     (function(){
       const hexWrap = document.querySelector('.hex-wrap');
-      const hex = document.getElementById('hex');
-      if(!hex) return;
+      const container = document.getElementById('hex-container');
+      if(!container || !hexWrap) return;
 
-      let angle = 0; // degrees
-      let targetSpeed = 0.12; // deg per frame
-      let speed = targetSpeed * 0.6;
-      const hoverSpeed = 2.2; // faster deg/frame when hovered
+      const hexes = Array.from(container.querySelectorAll('.hexagon'));
+      // durations (seconds) from your supplied code
+      const durations = [20, 17, 23, 19, 25, 21, 16];
 
-      let tiltX = 0, tiltY = 0;
-      let targetTiltX = 0, targetTiltY = 0;
+      // per-hex angles
+      const angles = new Array(hexes.length).fill(0);
 
-      // Parallax factors for layers (glow front/back)
-      const layers = Array.from(hex.querySelectorAll('.layer'));
-      const layerFactors = layers.map((_, i) => 1 + (i * 0.06));
+      // base speed in degrees per frame (approx) and multiplier
+      let baseSpeed = 0.12; // normal
+      let speedMultiplier = 1; // increases on hover
+      const hoverMultiplier = 10;
+
+      // tilt/parallax
+      let tiltX = 0, tiltY = 0, targetTiltX = 0, targetTiltY = 0;
+
+      // per-hex parallax factors
+      const factors = hexes.map((_, i) => 1 + i * 0.06);
+
+      // reveal hero text after 2s
+      const heroContent = document.querySelector('.hero-content');
+      setTimeout(()=>{ if(heroContent) heroContent.classList.add('visible') }, 2000);
 
       function raf(){
-        // ease speed
-        speed += (targetSpeed - speed) * 0.08;
-        angle = (angle + speed) % 360;
+        // update each hex's angle based off its relative duration
+        hexes.forEach((node, idx) => {
+          // relative speed: shorter duration -> faster rotation
+          const rel = durations[idx] / 20; // base scaling
+          const delta = baseSpeed * (1 / rel) * speedMultiplier;
+          angles[idx] = (angles[idx] + delta) % 360;
 
-        // ease tilt
+          // apply tilt/parallax translation and rotation
+          const tx = targetTiltX * 0.6 * factors[idx];
+          const ty = targetTiltY * 0.6 * factors[idx];
+          node.style.transform = `translate(-50%, -50%) translate3d(${tx}px, ${ty}px, 0px) rotate(${angles[idx]}deg)`;
+        });
+
+        // easing tilt toward targets
         tiltX += (targetTiltX - tiltX) * 0.12;
         tiltY += (targetTiltY - tiltY) * 0.12;
-
-        // Apply transforms
-        hex.style.transform = `rotateZ(${angle}deg) rotateX(${tiltY}deg) rotateY(${tiltX}deg)`;
-
-        // Slight parallax on each layer
-        layers.forEach((node, idx) => {
-          const f = layerFactors[idx];
-          const tx = tiltX * 0.6 * f;
-          const ty = tiltY * 0.6 * f;
-          node.style.transform = `translate3d(${tx}px, ${ty}px, 0px) scale(${1 + (idx*0.02)})`;
-        });
 
         requestAnimationFrame(raf);
       }
 
       raf();
 
-      // Hover controls
+      // Hover controls on hexWrap
       hexWrap.addEventListener('mouseenter', ()=>{
-        targetSpeed = hoverSpeed;
-        hex.classList.add('hovered');
+        speedMultiplier = hoverMultiplier;
+        container.classList.add('hovered');
       });
       hexWrap.addEventListener('mouseleave', ()=>{
-        targetSpeed = 0.12;
-        hex.classList.remove('hovered');
-        // reset tilt targets smoothly
+        speedMultiplier = 1;
+        container.classList.remove('hovered');
         targetTiltX = 0; targetTiltY = 0;
       });
 
@@ -369,17 +388,16 @@
         const rect = hexWrap.getBoundingClientRect();
         const nx = (e.clientX - rect.left) / rect.width; // 0..1
         const ny = (e.clientY - rect.top) / rect.height; // 0..1
-        // center at 0
-        targetTiltX = (nx - 0.5) * 20; // degrees
-        targetTiltY = -(ny - 0.5) * 12; // degrees
+        targetTiltX = (nx - 0.5) * 20; // degrees range
+        targetTiltY = -(ny - 0.5) * 12; // degrees range
       });
 
-      // make sure the hover works on touch as well (tap to toggle)
+      // touch/click toggles
       hexWrap.addEventListener('click', ()=>{
-        if (hex.classList.contains('hovered')){
-          hex.classList.remove('hovered'); targetSpeed = 0.12;
+        if (container.classList.contains('hovered')){
+          container.classList.remove('hovered'); speedMultiplier = 1;
         } else {
-          hex.classList.add('hovered'); targetSpeed = hoverSpeed;
+          container.classList.add('hovered'); speedMultiplier = hoverMultiplier;
         }
       });
 
