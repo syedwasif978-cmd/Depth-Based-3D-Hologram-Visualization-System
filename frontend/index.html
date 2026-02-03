@@ -330,42 +330,43 @@
       const hexes = Array.from(container.querySelectorAll('.hexagon'));
       // durations (seconds) from your supplied code
       const durations = [20, 17, 23, 19, 25, 21, 16];
+      // alternating directions (+1 / -1) to mirror your css keyframes' alternating spin
+      const directions = [1, -1, 1, -1, 1, -1, 1];
 
-      // per-hex angles
-      const angles = new Array(hexes.length).fill(0);
+      // per-hex angles (initialize with staggered phase offsets for "moves at different time" feel)
+      const angles = new Array(hexes.length).fill(0).map((_, i)=> (i * (360 / hexes.length) * (i % 2 ? 1 : -1)));
 
       // base speed in degrees per frame (approx) and multiplier
       let baseSpeed = 0.12; // normal
       let speedMultiplier = 1; // increases on hover
       const hoverMultiplier = 10;
 
-      // tilt/parallax
+      // tilt/parallax (eased)
       let tiltX = 0, tiltY = 0, targetTiltX = 0, targetTiltY = 0;
 
       // per-hex parallax factors
       const factors = hexes.map((_, i) => 1 + i * 0.06);
 
-      // reveal hero text after 2s
+      // reveal hero text after 1s (changed to your requested 1s delay)
       const heroContent = document.querySelector('.hero-content');
-      setTimeout(()=>{ if(heroContent) heroContent.classList.add('visible') }, 2000);
+      setTimeout(()=>{ if(heroContent) heroContent.classList.add('visible') }, 1000);
 
       function raf(){
-        // update each hex's angle based off its relative duration
-        hexes.forEach((node, idx) => {
-          // relative speed: shorter duration -> faster rotation
-          const rel = durations[idx] / 20; // base scaling
-          const delta = baseSpeed * (1 / rel) * speedMultiplier;
-          angles[idx] = (angles[idx] + delta) % 360;
-
-          // apply tilt/parallax translation and rotation
-          const tx = targetTiltX * 0.6 * factors[idx];
-          const ty = targetTiltY * 0.6 * factors[idx];
-          node.style.transform = `translate(-50%, -50%) translate3d(${tx}px, ${ty}px, 0px) rotate(${angles[idx]}deg)`;
-        });
-
-        // easing tilt toward targets
+        // ease tilt toward targets first for smooth interpolation
         tiltX += (targetTiltX - tiltX) * 0.12;
         tiltY += (targetTiltY - tiltY) * 0.12;
+
+        // update each hex's angle based off its relative duration and direction
+        hexes.forEach((node, idx) => {
+          const rel = durations[idx] / 20; // base scaling
+          const delta = baseSpeed * (1 / rel) * speedMultiplier * directions[idx];
+          angles[idx] = (angles[idx] + delta) % 360;
+
+          // apply tilt/parallax translation and rotation (use eased tilt values)
+          const tx = tiltX * 0.6 * factors[idx];
+          const ty = tiltY * 0.6 * factors[idx];
+          node.style.transform = `translate(-50%, -50%) translate3d(${tx}px, ${ty}px, 0px) rotate(${angles[idx]}deg)`;
+        });
 
         requestAnimationFrame(raf);
       }
