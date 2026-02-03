@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Graphite — Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* Exact same styles as main UI to preserve look */
+    :root { --bg: #0b0b0d; --panel: #111214; --text: #ffffff; --muted: #9aa0a6; --accent: #b58cff; --accent-2: #ffd37a; --border: rgba(255,255,255,0.08);} *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif;} body{margin:0;background:radial-gradient(circle at top,#151518,var(--bg));color:var(--text);}
+    .nav{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 64px;border-bottom:1px solid var(--border);} .logo{font-weight:600;font-size:18px}
+    .login{margin-top:120px;padding:120px 24px;display:flex;justify-content:center;background:radial-gradient(circle at center, rgba(255,255,255,0.04), transparent 70%);} .login-box{width:420px;background:linear-gradient(180deg,#0f1013,#0b0b0d);border-radius:16px;border:1px solid var(--border);padding:40px;text-align:center;} .input{width:100%;padding:14px;border-radius:10px;border:1px solid var(--border);background:#0f1013;color:white;margin-bottom:16px;} .btn{padding:10px 16px;border-radius:10px;font-size:14px;cursor:pointer} .btn-outline{border:1px solid var(--border);background:transparent;color:white}
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <div class="nav">
+    <div class="logo">⬢ Graphite</div>
+    <div class="nav-right">
+      <div class="btn btn-outline">Log in</div>
+      <div class="btn btn-gradient">Sign up →</div>
+    </div>
+  </div>
+
+  <!-- LOGIN ONLY PAGE -->
+  <section class="login">
+    <div class="login-box">
+      <h2>Create your Graphite account</h2>
+      <input class="input" placeholder="Enter your work email" />
+      <div class="btn btn-outline">Sign up with GitHub</div>
+
+      <div class="logos" style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:40px;opacity:0.7;font-size:13px;color:var(--muted);">
+        <div>Shopify</div>
+        <div>Snowflake</div>
+        <div>Figma</div>
+        <div>Vercel</div>
+        <div>Duolingo</div>
+        <div>Ramp</div>
+        <div>Cursor</div>
+        <div>Statsig</div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

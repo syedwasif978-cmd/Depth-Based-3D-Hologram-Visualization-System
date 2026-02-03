@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Graphite — Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* Preserved styles from index to match feel */
+    :root { --bg: #0b0b0d; --panel: #111214; --text: #ffffff; --muted: #9aa0a6; --accent: #b58cff; --accent-2: #ffd37a; --border: rgba(255,255,255,0.08);} *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif;} body{margin:0;background:radial-gradient(circle at top,#151518,var(--bg));color:var(--text);} .nav{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 64px;border-bottom:1px solid var(--border);} .hero{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;padding:100px 64px;align-items:center;} .hero h1{font-size:64px;line-height:1.05;margin:0 0 24px;} .hex-wrap{position:relative;width:420px;height:420px;margin-left:auto;perspective:1200px}
+    .hex{position:absolute;inset:0;will-change:transform;transform-style:preserve-3d;filter:drop-shadow(0 0 30px rgba(255,255,255,0.18));transition:transform 350ms cubic-bezier(.2,.9,.2,1);} .hex .glow{fill:none;stroke:white;stroke-width:4;stroke-linejoin:round;stroke-linecap:round;opacity:0.9;filter:blur(8px) drop-shadow(0 0 28px rgba(255,255,255,0.45));transition:filter 300ms ease, opacity 300ms ease;} .hex path{fill:none;stroke:white;stroke-width:2;opacity:0.95;mix-blend-mode:screen;}
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="logo">⬢ Graphite</div>
+    <div class="nav-right">
+      <div class="btn btn-outline">Log in</div>
+      <div class="btn btn-gradient">Sign up →</div>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div>
+      <h1>The next generation<br/>of code review.</h1>
+      <p style="color:var(--muted);max-width:520px;font-size:18px;margin-bottom:32px;">Graphite is the AI code review platform where teams ship higher quality code, faster.</p>
+      <div class="hero-buttons"><div class="btn btn-gradient">Get started for free →</div><div class="btn btn-outline">Request a demo</div></div>
+    </div>
+
+    <div class="hex-wrap">
+      <div class="hex" id="hex-dashboard">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <g class="layer glow">
+            <path d="M100 10 173 50 173 150 100 190 27 150 27 50 Z"/>
+            <path d="M100 20 160 55 160 145 100 180 40 145 40 55 Z"/>
+            <path d="M100 30 150 60 150 140 100 170 50 140 50 60 Z"/>
+            <path d="M100 40 140 65 140 135 100 160 60 135 60 65 Z"/>
+          </g>
+          <g class="layer front">
+            <path d="M100 10 173 50 173 150 100 190 27 150 27 50 Z"/>
+            <path d="M100 20 160 55 160 145 100 180 40 145 40 55 Z"/>
+            <path d="M100 30 150 60 150 140 100 170 50 140 50 60 Z"/>
+            <path d="M100 40 140 65 140 135 100 160 60 135 60 65 Z"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Mirror the same smooth rotation/parallax used in index.html
+    (function(){
+      const hexWrap = document.querySelector('.hex-wrap');
+      const hex = document.getElementById('hex-dashboard');
+      if(!hex) return;
+      let angle = 0; let targetSpeed = 0.12; let speed = targetSpeed*0.6; const hoverSpeed = 2.2; let tiltX=0,tiltY=0,targetTiltX=0,targetTiltY=0; const layers = Array.from(hex.querySelectorAll('.layer')); const layerFactors = layers.map((_, i) => 1 + (i * 0.06));
+      function raf(){ speed += (targetSpeed - speed) * 0.08; angle = (angle + speed) % 360; tiltX += (targetTiltX - tiltX) * 0.12; tiltY += (targetTiltY - tiltY) * 0.12; hex.style.transform = `rotateZ(${angle}deg) rotateX(${tiltY}deg) rotateY(${tiltX}deg)`; layers.forEach((node, idx)=>{const f = layerFactors[idx];const tx = tiltX * 0.6 * f;const ty = tiltY * 0.6 * f;node.style.transform = `translate3d(${tx}px, ${ty}px, 0px) scale(${1 + (idx*0.02)})`}); requestAnimationFrame(raf);} raf(); hexWrap.addEventListener('mouseenter', ()=>{targetSpeed = hoverSpeed; hex.classList.add('hovered')}); hexWrap.addEventListener('mouseleave', ()=>{targetSpeed = 0.12; hex.classList.remove('hovered'); targetTiltX=0; targetTiltY=0}); hexWrap.addEventListener('mousemove', (e)=>{const rect=hexWrap.getBoundingClientRect(); const nx=(e.clientX-rect.left)/rect.width; const ny=(e.clientY-rect.top)/rect.height; targetTiltX=(nx-0.5)*20; targetTiltY=-(ny-0.5)*12}); hexWrap.addEventListener('click', ()=>{ if(hex.classList.contains('hovered')){hex.classList.remove('hovered'); targetSpeed=0.12;} else {hex.classList.add('hovered'); targetSpeed=hoverSpeed;} });
+    })();
+  </script>
+</body>
+</html>

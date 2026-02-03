@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Graphite Style UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg: #0b0b0d;
+      --panel: #111214;
+      --text: #ffffff;
+      --muted: #9aa0a6;
+      --accent: #b58cff;
+      --accent-2: #ffd37a;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #151518, var(--bg));
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* NAVBAR */
+    .nav {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 64px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all .25s ease;
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: white;
+    }
+
+    .btn-gradient {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #000;
+      font-weight: 600;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.9;
+    }
+
+    /* HERO */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 40px;
+      padding: 100px 64px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: 64px;
+      line-height: 1.05;
+      margin: 0 0 24px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 520px;
+      font-size: 18px;
+      margin-bottom: 32px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+    }
+
+    /* HEX */
+    .hex-wrap {
+      position: relative;
+      width: 420px;
+      height: 420px;
+      margin-left: auto;
+    }
+
+    .hex {
+      position: absolute;
+      inset: 0;
+      /* JS-driven rotation for smooth speed transitions */
+      will-change: transform;
+      transform-style: preserve-3d;
+      filter: drop-shadow(0 0 30px rgba(255,255,255,0.18));
+    }
+
+    /* Neon glow layer behind the crisp strokes */
+    .hex .glow {
+      fill: none;
+      stroke: white;
+      stroke-width: 4;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      opacity: 0.9;
+      filter: blur(8px) drop-shadow(0 0 28px rgba(255,255,255,0.45));
+      transition: filter 300ms ease, opacity 300ms ease;
+    }
+
+    /* Crisp main stroke */
+    .hex path {
+      fill: none;
+      stroke: white;
+      stroke-width: 2;
+      opacity: 0.95;
+      mix-blend-mode: screen;
+    }
+
+    /* Hovered state intensifies glow */
+    .hex.hovered .glow {
+      filter: blur(14px) drop-shadow(0 0 48px rgba(255,255,255,0.95));
+      opacity: 1;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Improve responsiveness and smooth transforms */
+    .hex-wrap { perspective: 1200px; -webkit-perspective: 1200px; }
+    .hex { transition: transform 350ms cubic-bezier(.2,.9,.2,1); }
+    .hex .layer { transform-origin: 50% 50%; }
+
+
+    /* LOGIN */
+    .login {
+      margin-top: 120px;
+      padding: 120px 24px;
+      display: flex;
+      justify-content: center;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.04), transparent 70%);
+    }
+
+    .login-box {
+      width: 420px;
+      background: linear-gradient(180deg, #0f1013, #0b0b0d);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 40px;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+
+    .input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0f1013;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .login-box .btn {
+      width: 100%;
+    }
+
+    .logos {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 40px;
+      opacity: 0.7;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .hex-wrap {
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-left">
+      <div class="logo">⬢ Graphite</div>
+      <div class="nav-links">
+        <div>Features</div>
+        <div>Resources</div>
+        <div>Customers</div>
+        <div>Docs</div>
+        <div>Pricing</div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="btn btn-outline">Log in</div>
+      <div class="btn btn-gradient">Sign up →</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <h1>The next generation<br/>of code review.</h1>
+      <p>
+        Graphite is the AI code review platform where teams ship higher
+        quality code, faster.
+      </p>
+      <div class="hero-buttons">
+        <div class="btn btn-gradient">Get started for free →</div>
+        <div class="btn btn-outline">Request a demo</div>
+      </div>
+    </div>
+
+    <div class="hex-wrap">
+      <div class="hex" id="hex">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <!-- Glow layers (behind) -->
+          <g class="layer glow">
+            <path d="M100 10 173 50 173 150 100 190 27 150 27 50 Z"/>
+            <path d="M100 20 160 55 160 145 100 180 40 145 40 55 Z"/>
+            <path d="M100 30 150 60 150 140 100 170 50 140 50 60 Z"/>
+            <path d="M100 40 140 65 140 135 100 160 60 135 60 65 Z"/>
+          </g>
+
+          <!-- Crisp strokes (front) -->
+          <g class="layer front">
+            <path d="M100 10 173 50 173 150 100 190 27 150 27 50 Z"/>
+            <path d="M100 20 160 55 160 145 100 180 40 145 40 55 Z"/>
+            <path d="M100 30 150 60 150 140 100 170 50 140 50 60 Z"/>
+            <path d="M100 40 140 65 140 135 100 160 60 135 60 65 Z"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGIN -->
+  <section class="login">
+    <div class="login-box">
+      <h2>Create your Graphite account</h2>
+      <input class="input" placeholder="Enter your work email" />
+      <div class="btn btn-outline">Sign up with GitHub</div>
+
+      <div class="logos">
+        <div>Shopify</div>
+        <div>Snowflake</div>
+        <div>Figma</div>
+        <div>Vercel</div>
+        <div>Duolingo</div>
+        <div>Ramp</div>
+        <div>Cursor</div>
+        <div>Statsig</div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Smooth JS-driven rotation + hover speed and parallax depth
+    (function(){
+      const hexWrap = document.querySelector('.hex-wrap');
+      const hex = document.getElementById('hex');
+      if(!hex) return;
+
+      let angle = 0; // degrees
+      let targetSpeed = 0.12; // deg per frame
+      let speed = targetSpeed * 0.6;
+      const hoverSpeed = 2.2; // faster deg/frame when hovered
+
+      let tiltX = 0, tiltY = 0;
+      let targetTiltX = 0, targetTiltY = 0;
+
+      // Parallax factors for layers (glow front/back)
+      const layers = Array.from(hex.querySelectorAll('.layer'));
+      const layerFactors = layers.map((_, i) => 1 + (i * 0.06));
+
+      function raf(){
+        // ease speed
+        speed += (targetSpeed - speed) * 0.08;
+        angle = (angle + speed) % 360;
+
+        // ease tilt
+        tiltX += (targetTiltX - tiltX) * 0.12;
+        tiltY += (targetTiltY - tiltY) * 0.12;
+
+        // Apply transforms
+        hex.style.transform = `rotateZ(${angle}deg) rotateX(${tiltY}deg) rotateY(${tiltX}deg)`;
+
+        // Slight parallax on each layer
+        layers.forEach((node, idx) => {
+          const f = layerFactors[idx];
+          const tx = tiltX * 0.6 * f;
+          const ty = tiltY * 0.6 * f;
+          node.style.transform = `translate3d(${tx}px, ${ty}px, 0px) scale(${1 + (idx*0.02)})`;
+        });
+
+        requestAnimationFrame(raf);
+      }
+
+      raf();
+
+      // Hover controls
+      hexWrap.addEventListener('mouseenter', ()=>{
+        targetSpeed = hoverSpeed;
+        hex.classList.add('hovered');
+      });
+      hexWrap.addEventListener('mouseleave', ()=>{
+        targetSpeed = 0.12;
+        hex.classList.remove('hovered');
+        // reset tilt targets smoothly
+        targetTiltX = 0; targetTiltY = 0;
+      });
+
+      // Mouse move for parallax tilt
+      hexWrap.addEventListener('mousemove', (e)=>{
+        const rect = hexWrap.getBoundingClientRect();
+        const nx = (e.clientX - rect.left) / rect.width; // 0..1
+        const ny = (e.clientY - rect.top) / rect.height; // 0..1
+        // center at 0
+        targetTiltX = (nx - 0.5) * 20; // degrees
+        targetTiltY = -(ny - 0.5) * 12; // degrees
+      });
+
+      // make sure the hover works on touch as well (tap to toggle)
+      hexWrap.addEventListener('click', ()=>{
+        if (hex.classList.contains('hovered')){
+          hex.classList.remove('hovered'); targetSpeed = 0.12;
+        } else {
+          hex.classList.add('hovered'); targetSpeed = hoverSpeed;
+        }
+      });
+
+    })();
+  </script>
+</body>
+</html>
