@@ -43,6 +43,14 @@ npm run dev
 ## API
 
 POST /upload
-- form field: `file` (image)
+- form field: `files` (1 or 2 image files)
+- optional form fields: `edge_sharpen` (boolean), `background_blur` (boolean)
 - returns: `{ image_url: "/static/uploads/xxx.png", depth_url: "/static/depths/depth_xxx.png" }`
+
+## Features added in this scaffold
+
+- 2-image support: pass up to 2 images — the backend computes depth for each and averages them for a more robust depth cue.
+- Edge sharpening: toggleable option that detects depth edges and enhances them in the depth map, improving wireframe/hologram contours.
+- Background blur: toggleable option that blurs far background regions of the original image using the depth map and returns the processed image for rendering.
+- Frontend toggles: Auto-rotate and Bloom (postprocessing) toggles are available in the UI.
 
