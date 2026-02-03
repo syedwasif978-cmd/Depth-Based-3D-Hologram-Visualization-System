@@ -46,15 +46,3 @@ POST /upload
 - form field: `file` (image)
 - returns: `{ image_url: "/static/uploads/xxx.png", depth_url: "/static/depths/depth_xxx.png" }`
 
-## Next steps / Extensions
-
-- Support 2-image averaging
-- Edge sharpening and background blur
-- Add bloom postprocessing and UI toggles
-
----
-
-If you'd like, I can now: (choose one)
-1) Add unit tests and a dev script to start both servers concurrently, or
-2) Implement 2-image averaging and edge sharpening in the backend, or
-3) Add a small Dockerfile for both services.
